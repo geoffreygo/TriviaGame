@@ -1,0 +1,13 @@
+body, .bkgrd {
+    background-image: url(../images/starring.png);
+}
+
+.jumbotron {
+    background-image: url(../images/old_moon.png);
+    height: 50rem;
+}
+
+.h2:hover {
+    font-weight: 700;
+    cursor:pointer;
+}
