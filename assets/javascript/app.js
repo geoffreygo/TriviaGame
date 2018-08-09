@@ -26,7 +26,7 @@ $(document).ready(function() {
             correct: "one",
         },
         {
-            question: "The percentage of mass in our solar system that the sun accounts for is roughly:",
+            question: "The percentage of mass that the sun accounts for in our solar system is:",
             one: "87.6%",
             two: "59.7%",
             three: "78.9%",
@@ -42,28 +42,44 @@ $(document).ready(function() {
             correct: "three",
         },
         {
-            question: "Roughly one quarter of known species of mammals are:",
-            one: "Rodents",
-            two: "Bats",
-            three: "Primates",
-            four: "Whales",
+            question: "Which planet has the most moons?",
+            one: "Saturn",
+            two: "Mars",
+            three: "Jupiter",
+            four: "Venus",
+            correct: "three",
+        },
+        {
+            question: "At what temperature are Celsium and Fahrenheit equal?",
+            one: "zero",
+            two: "32 degrees",
+            three: "24 degrees",
+            four: "- 40 degrees",
+            correct: "four",
+        },
+        {
+            question: "A Tropical storm becomes a hurricane at what speed?",
+            one: "57 mph",
+            two: "74 mph",
+            three: "96 mph",
+            four: "107 mph",
             correct: "two",
         },
         {
-            question: "Roughly one quarter of known species of mammals are:",
-            one: "Rodents",
-            two: "Bats",
-            three: "Primates",
-            four: "Whales",
-            correct: "two",
+            question: "The idea of the atom was first introduced in:",
+            one: "1791",
+            two: "1942",
+            three: "1050",
+            four: "450 B.C.",
+            correct: "four",
         },
         {
-            question: "Roughly one quarter of known species of mammals are:",
-            one: "Rodents",
-            two: "Bats",
-            three: "Primates",
-            four: "Whales",
-            correct: "two",
+            question: "A hummingbird's heart rate while in flight can reach:",
+            one: "170 bpm",
+            two: "240 bpm",
+            three: "620 bpm",
+            four: "1,260 bpm",
+            correct: "four",
         },
     ];
     var correct = 0;
@@ -71,25 +87,28 @@ $(document).ready(function() {
     var unanswered = 0;
     var intervalId;
     var index = 0;
+    var gameOver = false;
     var timer = {
-        time: 30,
+        time: 15,
         reset: function() {
-            timer.time = 30;
-            $("#timer").text("30");
+            timer.time = 15;
+            $("#timer").text("15");
         },
         start: function() {
             clearInterval(intervalId);
             intervalId = setInterval(timer.count, 1000)
         },
         count: function() {
-            if (timer.time != 0) {
+            if (gameOver) {
+                return;
+            } else if (timer.time != 0) {
                 timer.time--;
                 $("#timer").text(timer.time);
             } else {
                 $("#prompt").text("Time's up!");
                 index++;
                 unanswered++;
-                setTimeout(getQuestion, 2000);
+                setTimeout(getQuestion, 1200);
             }   
         },
         stop: function() {
@@ -100,14 +119,17 @@ $(document).ready(function() {
     $("#restart").hide();
 
     function resetGame() {
-        var correct = 0;
-        var incorrect = 0;
-        var unanswered = 0;
-        var index = 0;
+        console.log("running resetGame");
+        correct = 0;
+        incorrect = 0;
+        unanswered = 0;
+        index = 0;
         clearInterval(intervalId);
         $("#start").hide();
         $("#restart").hide();
+        $(".h2").removeClass("endGame");
         getQuestion();
+        gameOver = false;
     };
 
     function startGame() {
@@ -132,31 +154,46 @@ $(document).ready(function() {
         }
     };
 
-    $(".h2").on("click", function() {
-        timer.stop();
-        $(".h2").empty();
-        $("#question").empty();
-        if (trivia[index].correct === this.id) {
-            $("#prompt").text("Correct!");
-            index++;
-            correct++;
-            setTimeout(getQuestion, 2000);
+    $(".h2").on("click", function () {
+        if (gameOver) {
+            event.preventDefault();
         } else {
-            $("#prompt").text("Incorrect!");
-            index++;
-            incorrect++;
-            setTimeout(getQuestion, 2000);
+            timer.stop();
+            $(".h2").empty();
+            $("#question").empty();
+            if (trivia[index].correct === this.id) {
+                $("#prompt").text("Correct!");
+                index++;
+                correct++;
+                setTimeout(getQuestion, 1200);
+            } else {
+                $("#prompt").text("Incorrect!");
+                if (trivia[index].correct === "one") {
+                    $("#question").text("The correct answer is " + trivia[index].one.toLowerCase() + ".");
+                } else if (trivia[index].correct === "two") {
+                    $("#question").text("The correct answer is " + trivia[index].two.toLowerCase() + ".");
+                } else if (trivia[index].correct === "three") {
+                    $("#question").text("The correct answer is " + trivia[index].three.toLowerCase() + ".");
+                } else {
+                    $("#question").text("The correct answer is " + trivia[index].four.toLowerCase() + ".");
+                };
+                index++;
+                incorrect++;
+                setTimeout(getQuestion, 1200);
+            }
         }
     })
 
     function endGame() {
+        gameOver = true;
         $("#prompt").text("All done, here's how you did!");
-        $("#question").empty();
-        $("#one").text("You got " + correct + " questions correct!");
-        $("#two").text("You got " + incorrect + " questions incorrect!");
-        $("#three").text("Time ran out on " + unanswered + " questions.");
+        $("#question").html("<h2>You got " + correct + " questions correct! <br> You got " + incorrect + " questions incorrect!</h2>");
+        $("#one").text("Time ran out on " + unanswered + " questions.");
+        $("#two").empty();
+        $("#three").empty();
         $("#four").empty();
         $("#restart").show();
+        $(".h2").addClass("endGame");
     }
 
     $("#start").on("click", function() {

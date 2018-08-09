@@ -4,10 +4,27 @@ body, .bkgrd {
 
 .jumbotron {
     background-image: url(../images/old_moon.png);
-    height: 50rem;
+    height: 47rem;
 }
 
 .h2:hover {
     font-weight: 700;
     cursor:pointer;
+}
+
+.endGame:hover {
+    font-weight: 600;
+    cursor:auto;
+}
+
+hr {
+    background-color: black;
+}
+
+#medtall {
+    height: 3rem;
+}
+
+#tall {
+    height: 6rem;
 }
