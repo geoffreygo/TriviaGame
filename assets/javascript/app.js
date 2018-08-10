@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+    // array of question objects
     var trivia = [
         {
             question: "Roughly one quarter of known species of mammals are:",
@@ -82,12 +82,18 @@ $(document).ready(function() {
             correct: "four",
         },
     ];
+    // counters for correct, incorrect, and unanswered questions
     var correct = 0;
     var incorrect = 0;
     var unanswered = 0;
+
+    // variable to hold the setInterval for the timer object
     var intervalId;
+
+    // variable to keep track of what question the game is on
     var index = 0;
     var gameOver = false;
+    // timer object
     var timer = {
         time: 15,
         reset: function() {
@@ -98,6 +104,7 @@ $(document).ready(function() {
             clearInterval(intervalId);
             intervalId = setInterval(timer.count, 1000)
         },
+        // count method contains the logic for what to do when time runs out
         count: function() {
             if (gameOver) {
                 return;
@@ -115,11 +122,10 @@ $(document).ready(function() {
             clearInterval(intervalId);
         }
     }
-
+    // hide the restart button until the end of the game
     $("#restart").hide();
-
+    // reset game, variables, timer, html elements, then get the first question to play again
     function resetGame() {
-        console.log("running resetGame");
         correct = 0;
         incorrect = 0;
         unanswered = 0;
@@ -131,14 +137,15 @@ $(document).ready(function() {
         getQuestion();
         gameOver = false;
     };
-
+    // hide the start button, show the html fields for the question and answers, get the first question
     function startGame() {
         $("#start").hide();
         $(".h1 .h2").show();
         $("#prompt").text("Click on the correct answer:");
         getQuestion();
     };
-
+    // checks to see if there are any questions left in the array, if so, reset the timer
+    // and put the question and answers up, then start the timer. If no more ?s, end game
     function getQuestion() {
         if (index < trivia.length) {
             timer.reset();
@@ -153,7 +160,11 @@ $(document).ready(function() {
             endGame();
         }
     };
-
+    // click function for the answer. If game is over, do not respond to clicks. Otherwise
+    // stop the timer, blank out the question and answers. If the answer is correct, tell
+    // the user, increment the index and correct counters, and get the next question after
+    // 1.2 seconds. If incorrect, do all the same except for with the incorrect counter and tell the 
+    // user what the correct answer was
     $(".h2").on("click", function () {
         if (gameOver) {
             event.preventDefault();
@@ -183,7 +194,7 @@ $(document).ready(function() {
             }
         }
     })
-
+    // endGame puts up a lot of html to let the user know their stats for the game
     function endGame() {
         gameOver = true;
         $("#prompt").text("All done, here's how you did!");
@@ -195,7 +206,7 @@ $(document).ready(function() {
         $("#restart").show();
         $(".h2").addClass("endGame");
     }
-
+    // click functions for the buttons
     $("#start").on("click", function() {
         startGame();
     })
