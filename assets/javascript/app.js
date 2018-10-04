@@ -105,7 +105,7 @@ $(document).ready(function() {
             intervalId = setInterval(timer.count, 1000)
         },
         // count method contains the logic for what to do when time runs out
-        count: function() {
+        count: function () {
             if (gameOver) {
                 return;
             } else if (timer.time != 0) {
@@ -113,7 +113,12 @@ $(document).ready(function() {
                 $("#timer").text(timer.time);
             } else {
                 $("#prompt").text("Time's up!");
+                if (index === 10) {
+                    console.log(index);
+                    endGame();
+                }
                 index++;
+                console.log("index increased one");
                 unanswered++;
                 setTimeout(getQuestion, 1200);
             }   
@@ -175,6 +180,7 @@ $(document).ready(function() {
             if (trivia[index].correct === this.id) {
                 $("#prompt").text("Correct!");
                 index++;
+                console.log("index increased one");
                 correct++;
                 setTimeout(getQuestion, 1200);
             } else {
@@ -189,6 +195,7 @@ $(document).ready(function() {
                     $("#question").text("The correct answer is " + trivia[index].four.toLowerCase() + ".");
                 };
                 index++;
+                console.log("index increased one");
                 incorrect++;
                 setTimeout(getQuestion, 1200);
             }
